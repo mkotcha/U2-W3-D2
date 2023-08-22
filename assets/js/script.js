@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", event => {
-  window.setInterval(timer, 1000);
   printUserName();
   document.querySelector("form").addEventListener("submit", formSubmit);
+  document.querySelector("#play").addEventListener("click", play);
+  document.querySelector("#pause").addEventListener("click", pause);
+  document.querySelector("#stop").addEventListener("click", reset);
 });
 
 const printUserName = () => {
@@ -41,3 +43,29 @@ const timer = () => {
   counter++;
   sessionStorage.setItem("timer", counter);
 };
+
+const resetActive = () => {
+  const control = document.querySelectorAll("#timer-control > *");
+  control.forEach(elm => {
+    elm.classList.remove("active");
+  });
+};
+
+const play = event => {
+  resetActive();
+  timerInterval = setInterval(timer, 1000);
+  event.target.classList.add("active");
+};
+const pause = event => {
+  clearInterval(timerInterval);
+  resetActive();
+  event.target.classList.add("active");
+};
+const reset = event => {
+  resetActive();
+  clearInterval(timerInterval);
+  sessionStorage.setItem("timer", 0);
+  document.querySelector("#timer").innerText = "0";
+};
+
+let timerInterval = setInterval(timer, 1000);
