@@ -70,9 +70,11 @@ const play = event => {
   }
 };
 const pause = (event, timerInterval) => {
-  clearInterval(timerInterval);
-  resetActive();
-  event.target.classList.add("active");
+  if (!event.target.classList.contains("active")) {
+    clearInterval(timerInterval);
+    resetActive();
+    event.target.classList.add("active");
+  } else document.querySelector("#play").click();
 };
 const reset = (event, timerInterval) => {
   resetActive();
