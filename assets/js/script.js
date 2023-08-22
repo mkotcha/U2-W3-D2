@@ -1,9 +1,14 @@
 document.addEventListener("DOMContentLoaded", event => {
   printUserName();
+  const timerInterval = setInterval(timer, 1000);
   document.querySelector("form").addEventListener("submit", formSubmit);
   document.querySelector("#play").addEventListener("click", play);
-  document.querySelector("#pause").addEventListener("click", pause);
-  document.querySelector("#stop").addEventListener("click", reset);
+  document.querySelector("#pause").addEventListener("click", event => {
+    pause(event, timerInterval);
+  });
+  document.querySelector("#stop").addEventListener("click", event => {
+    reset(event, timerInterval);
+  });
 });
 
 const printUserName = () => {
@@ -53,19 +58,23 @@ const resetActive = () => {
 
 const play = event => {
   resetActive();
-  timerInterval = setInterval(timer, 1000);
+  const timerInterval = setInterval(timer, 1000);
   event.target.classList.add("active");
+  document.querySelector("#pause").addEventListener("click", event => {
+    pause(event, timerInterval);
+  });
+  document.querySelector("#stop").addEventListener("click", event => {
+    reset(event, timerInterval);
+  });
 };
-const pause = event => {
+const pause = (event, timerInterval) => {
   clearInterval(timerInterval);
   resetActive();
   event.target.classList.add("active");
 };
-const reset = event => {
+const reset = (event, timerInterval) => {
   resetActive();
   clearInterval(timerInterval);
   sessionStorage.setItem("timer", 0);
   document.querySelector("#timer").innerText = "0";
 };
-
-let timerInterval = setInterval(timer, 1000);
