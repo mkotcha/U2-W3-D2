@@ -1,14 +1,10 @@
 document.addEventListener("DOMContentLoaded", event => {
   printUserName();
-  const timerInterval = setInterval(timer, 1000);
-  document.querySelector("form").addEventListener("submit", formSubmit);
+  document.querySelector("form").addEventListener("submit", addUser);
+  document.querySelector("#rem-user").addEventListener("click", remUser);
   document.querySelector("#play").addEventListener("click", play);
-  document.querySelector("#pause").addEventListener("click", event => {
-    pause(event, timerInterval);
-  });
-  document.querySelector("#stop").addEventListener("click", event => {
-    reset(event, timerInterval);
-  });
+  document.querySelector("#pause").addEventListener("click", pause);
+  document.querySelector("#stop").addEventListener("click", reset);
 });
 
 const printUserName = () => {
@@ -20,24 +16,17 @@ const printUserName = () => {
   }
 };
 
-const formSubmit = event => {
+const addUser = event => {
   event.preventDefault();
-  const buttonId = event.submitter.id;
-  if (buttonId === "add-user") addUser();
-  if (buttonId === "rem-user") {
-    remUser();
-    event.target.reset();
-  }
+  const userName = document.querySelector("#user-name").value;
+  localStorage.setItem("userName", userName);
   printUserName();
 };
 
-const addUser = () => {
-  const userName = document.querySelector("#user-name").value;
-  localStorage.setItem("userName", userName);
-};
-
-const remUser = event => {
+const remUser = () => {
   localStorage.removeItem("userName");
+  document.querySelector("form").reset();
+  printUserName();
 };
 
 const timer = () => {
@@ -59,26 +48,30 @@ const resetActive = () => {
 const play = event => {
   if (!event.target.classList.contains("active")) {
     resetActive();
-    const timerInterval = setInterval(timer, 1000);
+    timerInterval = setInterval(timer, 1000);
     event.target.classList.add("active");
-    document.querySelector("#pause").addEventListener("click", event => {
-      pause(event, timerInterval);
-    });
-    document.querySelector("#stop").addEventListener("click", event => {
-      reset(event, timerInterval);
-    });
   }
 };
-const pause = (event, timerInterval) => {
-  if (!event.target.classList.contains("active")) {
-    clearInterval(timerInterval);
+
+const pause = event => {
+  const pauseBtn = event.target;
+  const playBtn = document.querySelector("#play");
+  if (playBtn.classList.contains("active")) {
     resetActive();
-    event.target.classList.add("active");
-  } else document.querySelector("#play").click();
+    clearInterval(timerInterval);
+    pauseBtn.classList.add("active");
+  } else {
+    if (pauseBtn.classList.contains("active")) {
+      playBtn.click();
+    }
+  }
 };
-const reset = (event, timerInterval) => {
+
+const reset = () => {
   resetActive();
   clearInterval(timerInterval);
   sessionStorage.setItem("timer", 0);
   document.querySelector("#timer").innerText = "0";
 };
+
+let timerInterval = setInterval(timer, 1000);
