@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", event => {
   printUserName();
-  let timerInterval = setInterval(timer, 1000);
   document.querySelector("form").addEventListener("submit", formSubmit);
   document.querySelector("#play").addEventListener("click", play);
   document.querySelector("#pause").addEventListener("click", pause);
