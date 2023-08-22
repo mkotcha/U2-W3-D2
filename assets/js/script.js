@@ -57,15 +57,17 @@ const resetActive = () => {
 };
 
 const play = event => {
-  resetActive();
-  const timerInterval = setInterval(timer, 1000);
-  event.target.classList.add("active");
-  document.querySelector("#pause").addEventListener("click", event => {
-    pause(event, timerInterval);
-  });
-  document.querySelector("#stop").addEventListener("click", event => {
-    reset(event, timerInterval);
-  });
+  if (!event.target.classList.contains("active")) {
+    resetActive();
+    const timerInterval = setInterval(timer, 1000);
+    event.target.classList.add("active");
+    document.querySelector("#pause").addEventListener("click", event => {
+      pause(event, timerInterval);
+    });
+    document.querySelector("#stop").addEventListener("click", event => {
+      reset(event, timerInterval);
+    });
+  }
 };
 const pause = (event, timerInterval) => {
   clearInterval(timerInterval);
