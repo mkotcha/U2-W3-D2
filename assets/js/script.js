@@ -43,9 +43,9 @@ const remUser = event => {
 const timer = () => {
   let counter = sessionStorage.getItem("timer") || 0;
   const counterElm = document.querySelector("#timer");
+  counter++;
   counterElm.innerText = counter;
   counterElm.classList.remove("placeholder");
-  counter++;
   sessionStorage.setItem("timer", counter);
 };
 
